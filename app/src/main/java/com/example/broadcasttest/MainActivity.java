@@ -1,6 +1,7 @@
 package com.example.broadcasttest;
 
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -31,15 +32,35 @@ public class MainActivity extends AppCompatActivity {
         //下面这一句：NetworkChangeReceiver 就会收到所有值为android.net.conn.CONNECTIVITY_CHANGE 的广播
         registerReceiver(networkChangeReceiver, intentFilter);
 
-        //发送广播
+        //发送标准广播
         Button sendButton = (Button) findViewById(R.id.button);
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 Intent intent = new Intent("com.example.broadcasttest.MY_BROADCAST");
+                //7.0的教程里没有这一句，高版本要加上，否则接收不到广播
+                intent.setComponent( new ComponentName( "com.example.broadcasttest" ,
+                        "com.example.broadcasttest.MyBroadcastReceiver") );
+
                 sendBroadcast(intent);
                 Log.d(TAG, "onClick: click the button!!");
+            }
+        });
+
+        //发送有序广播
+        Button sendOrderedButton = (Button) findViewById(R.id.button_order);
+        sendOrderedButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent("com.example.broadcasttest.MY_BROADCAST");
+                //7.0的教程里没有这一句，高版本要加上，否则接收不到广播
+                intent.setComponent( new ComponentName( "com.example.broadcasttest" ,
+                        "com.example.broadcasttest.MyBroadcastReceiver") );
+
+                sendOrderedBroadcast(intent, null);
+                Log.d(TAG, "onClick: cli ck the button!!");
             }
         });
     }
@@ -48,6 +69,12 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         unregisterReceiver(networkChangeReceiver);//动态注册的广播接收器一定都要取消注册才行
     }
+
+    /**
+     * 动态注册的例子：监听网络变化
+     * activity类内类receiver
+     * activity类内registerReceiver和unregisterReceiver
+     */
     class NetworkChangeReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {

@@ -10,11 +10,10 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
     private static final String TAG = "MyBroadcastReceiver";
     @Override
     public void onReceive(Context context, Intent intent) {
-        // TODO: This method is called when the BroadcastReceiver is receiving
-        // an Intent broadcast.
+
         Log.d(TAG, "onReceive: recieve the broadcast!");
         Toast.makeText(context, "received in MyBroadcastReceiver", Toast.LENGTH_SHORT).show();
 
-        throw new UnsupportedOperationException("Not yet implemented");
+
     }
 }
